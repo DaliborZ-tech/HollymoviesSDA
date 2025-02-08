@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from viewer.models import *
 
 
@@ -13,3 +13,15 @@ def movies(request):
 def home(request):
     return render(request=request,
                   template_name='home.html')
+
+
+def movie(request, pk):
+    if Movie.objects.filter(id=pk).exists():
+        movie_ = Movie.objects.get(id=pk)
+        context = {'movie': movie_}
+        return render(request=request,
+                      template_name='movie.html',
+                      context=context)
+    else:
+        return redirect("home")
+
