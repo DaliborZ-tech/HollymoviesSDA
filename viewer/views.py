@@ -8,3 +8,8 @@ def movies(request):
     return render(request=request,
                   template_name='movies.html',
                   context=context)
+
+
+def home(request):
+    return render(request=request,
+                  template_name='home.html')
