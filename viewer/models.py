@@ -20,6 +20,7 @@ class Country(Model):
 
     class Meta:
         ordering = ['name']
+        verbose_name_plural = "Countries"
 
     def __str__(self):
         return f"{self.name}"
@@ -42,10 +43,10 @@ class Movie(Model):
 
     class Meta:
         ordering = ['title_orig']
-        verbose_name_plural = "Countries"
+        verbose_name_plural = "Movies"
 
     def __str__(self):
-        return f"{self.title_orig} ({self.released_date})"
+        return f"{self.title_orig} ({self.released_year})"
 
     def __repr__(self):
         return f"Movie(title_orig={self.title_orig})"
