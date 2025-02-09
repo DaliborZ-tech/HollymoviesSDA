@@ -25,3 +25,9 @@ def movie(request, pk):
     else:
         return redirect("home")
 
+
+def genres(request):
+    genres_ = Genre.objects.all()
+    context = {'genres': genres_}
+    return render(request=request, template_name='genres.html', context=context)
+
