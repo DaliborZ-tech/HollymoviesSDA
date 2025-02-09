@@ -31,3 +31,10 @@ def genres(request):
     context = {'genres': genres_}
     return render(request=request, template_name='genres.html', context=context)
 
+
+def genre(request, pk):
+    if Genre.objects.filter(id=pk).exists():
+        return render(request=request, template_name='genre.html',
+                      context={'genre': Genre.objects.get(id=pk)})
+    return redirect("genres")
+

@@ -7,7 +7,7 @@
 {% block content %}
     <h1>{{ movie }}</h1>
     <h4>{% if movie.title_cz %}Český název: {{ movie.title_cz }}{% else %}{% endif %}</h4>
-    <h6><strong>Žánr:</strong> {% for genre in movie.genres.all %}{{ genre }}{% if not forloop.last %}, {% endif %}{% empty %}Tento film nemá přidělený žánr{% endfor %}</h6>
+    <h6><strong>Žánr:</strong> {% for genre in movie.genres.all %}<a href="{% url 'genre' genre.id %}">{{ genre }}</a>{% if not forloop.last %}, {% endif %}{% empty %}Tento film nemá přidělený žánr{% endfor %}</h6>
     <p><strong>Země:</strong> {% for country in movie.countries.all %}{{ country }}{% if not forloop.last %}, {% endif %}{% empty %}Původ není znám{% endfor %}</p>
     <p><strong>Délka:</strong> {% if movie.length %}{{ movie.length }} min{% else %}Délka není známa{% endif %}</p>
     <p><strong>Vyšel:</strong> {% if movie.released_year %}{{ movie.released_year }}{% elif movie.released_date %}{{ movie.released_date_cz }}{% else %}Datum vydání není znám{% endif %}</p>
