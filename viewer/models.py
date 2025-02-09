@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from django.db.models import Model, CharField, ManyToManyField, IntegerField, \
     TextField, DateField, DateTimeField
 
@@ -50,3 +52,8 @@ class Movie(Model):
 
     def __repr__(self):
         return f"Movie(title_orig={self.title_orig})"
+
+    def released_date_cz(self):
+        if self.released_date:
+            return datetime.strftime(self.released_date, "%d. %m. %Y")
+        return None
