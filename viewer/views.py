@@ -10,11 +10,6 @@ def movies(request):
                   context=context)
 
 
-def home(request):
-    return render(request=request,
-                  template_name='home.html')
-
-
 def movie(request, pk):
     if Movie.objects.filter(id=pk).exists():
         movie_ = Movie.objects.get(id=pk)
@@ -24,6 +19,11 @@ def movie(request, pk):
                       context=context)
     else:
         return redirect("home")
+
+
+def home(request):
+    return render(request=request,
+                  template_name='home.html')
 
 
 def genres(request):
