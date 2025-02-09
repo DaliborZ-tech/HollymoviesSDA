@@ -38,3 +38,15 @@ def genre(request, pk):
                       context={'genre': Genre.objects.get(id=pk)})
     return redirect("genres")
 
+
+def creators(request):
+    creators_ = Creator.objects.all()
+    context = {'creators': creators_}
+    return render(request=request, template_name='creators.html',
+                  context=context)
+
+def creator(request, pk):
+    if Creator.objects.filter(id=pk).exists():
+        return render(request=request, template_name='creator.html',
+                      context={'creator': Creator.objects.get(id=pk)})
+    return redirect("creators")

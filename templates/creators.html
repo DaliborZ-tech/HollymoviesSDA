@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Seznam tvůrců
+{% endblock %}
+{% block content %}
+    <h1>Tvůrci:</h1>
+    <ul>
+    {% for creator in creators %}
+        <li><a href="{% url 'creator' creator.id %}">{{ creator.name }} {{ creator.surname }}</a></li>
+    {% endfor %}
+    </ul>
+{% endblock %}

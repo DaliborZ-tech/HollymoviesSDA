@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block title %}
+    {{ creator.name }}
+{% endblock %}
+
+{% block content %}
+    <h1 class="text-center">{{ creator.name }} {{ creator.surname }}</h1>
+    <p>Acting</p>
+    <ul>
+        {% for movie in creator.acting.all %}
+            <li><a href="{% url 'movie' movie.id %}">{{ movie.title_orig }} / {{ movie.title_cz }}</a></li>
+        {% endfor %}
+    </ul>
+    <p>Directing</p>
+    <ul>
+        {% for movie in creator.directing.all %}
+            <li><a href="{% url 'movie' movie.id %}">{{ movie.title_orig }} / {{ movie.title_cz }}</a></li>
+        {% endfor %}
+    </ul>
+{% endblock %}
