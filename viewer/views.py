@@ -45,8 +45,22 @@ def creators(request):
     return render(request=request, template_name='creators.html',
                   context=context)
 
+
 def creator(request, pk):
     if Creator.objects.filter(id=pk).exists():
         return render(request=request, template_name='creator.html',
                       context={'creator': Creator.objects.get(id=pk)})
     return redirect("creators")
+
+
+def countries(request):
+    countries_ = Country.objects.all()
+    context = {'countries': countries_}
+    return render(request=request, template_name='countries.html', context=context)
+
+
+def country(request, pk):
+    if Country.objects.filter(id=pk).exists():
+        return render(request=request, template_name='country.html',
+                      context={'country': Country.objects.get(id=pk)})
+    return redirect("Countries")

@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Seznam zemí
+{% endblock %}
+{% block content %}
+    <h1>Země</h1>
+    <ul>
+    {% for country in countries %}
+        {% if country.movies.count %}
+        <li><a href="{% url 'country' country.id %}">{{ country }}</a> ({{ country.movies.count }})</li>
+            <ul>
+                {% for movie in country.movies.all %}
+                    <li><a href="{% url 'movie' movie.id %}">{{ movie }}</a></li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    {% endfor %}
+    </ul>
+{% endblock %}

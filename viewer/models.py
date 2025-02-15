@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, date
 
 from django.db import models
 from django.db.models import Model, CharField, ManyToManyField, IntegerField, \
@@ -61,6 +61,13 @@ class Movie(Model):
             return datetime.strftime(self.released_date, "%d. %m. %Y")
         return None
 
+    def length_format(self):
+        if self.length is not None:
+            hours = self.length // 60
+            minutes = self.length % 60
+            return f"{hours}:{minutes:02d} (hod:min)"
+        return "N/A"
+
 
 class Creator(Model):
     name = CharField(max_length=32, null=True, blank=True)
@@ -79,9 +86,20 @@ class Creator(Model):
         return f"Creator {self.name} {self.surname})"
 
     def age(self):
+        if self.date_of_birth:
+            end_date = self.date_of_death if self.date_of_death else date.today()
+            return (end_date - self.date_of_birth).days // 365
+        return None
+
+    def date_of_birth_format(self):
+        if self.date_of_birth:
+            return datetime.strftime(self.date_of_birth, "%d. %m. %Y")
+        return "N/A"
+
+    def date_of_death_format(self):
         if self.date_of_death:
-            return (self.date_of_death - self.date_of_birth).days
-        return datetime.date.today() - self.date_of_birth
+            return datetime.strftime(self.date_of_death, "%d. %m. %Y")
+        return "N/A"
 
     class Meta:
         ordering = ['surname']
