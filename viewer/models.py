@@ -94,12 +94,12 @@ class Creator(Model):
     def date_of_birth_format(self):
         if self.date_of_birth:
             return datetime.strftime(self.date_of_birth, "%d. %m. %Y")
-        return "N/A"
+        return None
 
     def date_of_death_format(self):
         if self.date_of_death:
             return datetime.strftime(self.date_of_death, "%d. %m. %Y")
-        return "N/A"
+        return None
 
     class Meta:
         ordering = ['surname']

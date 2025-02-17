@@ -7,9 +7,9 @@
 {% block content %}
     <h1 class="text-center">{{ creator.name }} {{ creator.surname }}</h1>
     {% if creator.date_of_death %}
-        <p>Narozen: {{ creator.date_of_birth_format }}   Úmrtí: †{{ creator.date_of_death_format }}   Věk: †{{ creator.age }}</p>
+        <p>Narozen: {{ creator.date_of_birth_format }}   Úmrtí: †{{ creator.date_of_death_format }}   Věk: †{{ creator.age }} let</p>
     {% else %}
-        <p>Narozen: {{ creator.date_of_birth_format }}   Věk: {{ creator.age }}</p>
+        <p>Narozen: {{ creator.date_of_birth_format }}   Věk: {{ creator.age }} let</p>
     {% endif %}
     {% if creator.country %}
         <p>Země: {{ creator.country }}</p>
