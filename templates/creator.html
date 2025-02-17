@@ -14,16 +14,25 @@
     {% if creator.country %}
         <p>Země: {{ creator.country }}</p>
     {% endif %}
+    <hr>
     <p>Hraje:</p>
     <ul>
         {% for movie in creator.acting.all %}
             <li><a href="{% url 'movie' movie.id %}">{{ movie.title_orig }} / {{ movie.title_cz }}</a></li>
         {% endfor %}
     </ul>
+    <hr>
     <p>Režíruje:</p>
     <ul>
         {% for movie in creator.directing.all %}
             <li><a href="{% url 'movie' movie.id %}">{{ movie.title_orig }} / {{ movie.title_cz }}</a></li>
         {% endfor %}
     </ul>
+
+    {% if creator.biography %}
+        <hr>
+        <h6>Biografie:</h6>
+        <p>{{ creator.biography }}</p>
+    {% endif %}
+
 {% endblock %}
