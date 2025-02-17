@@ -66,7 +66,7 @@ class Movie(Model):
             hours = self.length // 60
             minutes = self.length % 60
             return f"{hours}:{minutes:02d} (hod:min)"
-        return "N/A"
+        return None
 
 
 class Creator(Model):
@@ -76,6 +76,7 @@ class Creator(Model):
     date_of_birth = DateField(null=True, blank=True)
     date_of_death = DateField(null=True, blank=True)
     country = ForeignKey(Country, null=True, blank=True, related_name='creators', on_delete=models.SET_NULL)
+    biography = TextField(null=True, blank=True)
     created = DateTimeField(auto_now_add=True)
     updated = DateTimeField(auto_now=True)
 
