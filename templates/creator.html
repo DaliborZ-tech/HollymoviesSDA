@@ -5,29 +5,34 @@
 {% endblock %}
 
 {% block content %}
-    <h1 class="text-center">{{ creator.name }} {{ creator.surname }}</h1>
+    <h1 class="text-center">{{ creator }}</h1>
     {% if creator.date_of_death %}
         <p>Narozen: {{ creator.date_of_birth_format }}   Úmrtí: †{{ creator.date_of_death_format }}   Věk: †{{ creator.age }} let</p>
-    {% else %}
+    {% elif creator.date_of_birth %}
         <p>Narozen: {{ creator.date_of_birth_format }}   Věk: {{ creator.age }} let</p>
     {% endif %}
     {% if creator.country %}
         <p>Země: {{ creator.country }}</p>
+        <hr>
     {% endif %}
+
+    {% if creator.acting.all %}
+        <p>Hraje:</p>
+        <ul>
+            {% for movie in creator.acting.all %}
+                <li><a href="{% url 'movie' movie.id %}">{{ movie.title_orig }} / {{ movie.title_cz }}</a></li>
+            {% endfor %}
+        </ul>
     <hr>
-    <p>Hraje:</p>
-    <ul>
-        {% for movie in creator.acting.all %}
-            <li><a href="{% url 'movie' movie.id %}">{{ movie.title_orig }} / {{ movie.title_cz }}</a></li>
-        {% endfor %}
-    </ul>
-    <hr>
+    {% endif %}
+    {% if creator.directing.all %}
     <p>Režíruje:</p>
     <ul>
         {% for movie in creator.directing.all %}
             <li><a href="{% url 'movie' movie.id %}">{{ movie.title_orig }} / {{ movie.title_cz }}</a></li>
         {% endfor %}
     </ul>
+    {% endif %}
 
     {% if creator.biography %}
         <hr>

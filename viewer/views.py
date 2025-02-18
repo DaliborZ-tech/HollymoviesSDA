@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.views.generic import FormView
 
-from viewer.forms import CreatorForm
+from viewer.forms import CreatorModelForm
 from viewer.models import *
 
 
@@ -59,7 +59,7 @@ def creator(request, pk):
 
 class CreatorFormView(FormView):
     template_name = 'form.html'
-    form_class = CreatorForm
+    form_class = CreatorModelForm
     success_url = reverse_lazy('creators')
 
     def form_valid(self, form):

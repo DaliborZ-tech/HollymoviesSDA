@@ -81,10 +81,19 @@ class Creator(Model):
     updated = DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f"{self.name} {self.surname}"
+        result = ""
+        if self.name:
+            result += self.name
+        if self.surname:
+            result += " " + self.surname
+        if self.alias:
+            result += " " + self.alias
+        if self.date_of_birth:
+            result += " (" + self.date_of_birth.strftime('%Y') + ")"
+        return result
 
     def __repr__(self):
-        return f"Creator {self.name} {self.surname})"
+        return f"Creator {self.name} {self.surname} {self.alias})"
 
     def age(self):
         if self.date_of_birth:
