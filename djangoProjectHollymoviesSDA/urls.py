@@ -17,8 +17,9 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
+from viewer.forms import CreatorForm
 from viewer.views import movies, home, movie, genres, genre, creators, creator, \
-    countries, country
+    countries, country, CreatorFormView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -30,6 +31,7 @@ urlpatterns = [
     path('genre/<int:pk>/', genre, name='genre'),
     path('creators/', creators, name='creators'),
     path('creator/<int:pk>/', creator, name='creator'),
+    path('creatorform/', CreatorFormView.as_view(), name='creatorform'),
     path('countries/', countries, name='countries'),
     path('country/<int:pk>/', country, name='country'),
 ]
