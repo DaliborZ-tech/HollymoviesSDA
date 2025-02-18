@@ -5,6 +5,10 @@
 {% endblock %}
 {% block content %}
     <h1>Tvůrci:</h1>
+    <br>
+    <a href="{% url 'creator_create'%}" class="btn btn-primary">Přidat</a>
+    <br>
+    <br>
     <ul>
     {% for creator in creators %}
         <li><a href="{% url 'creator' creator.id %}">{{ creator }}</a></li>

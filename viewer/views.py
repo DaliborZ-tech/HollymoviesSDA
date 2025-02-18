@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
-from django.views.generic import FormView
+from django.views.generic import FormView, CreateView, UpdateView, DeleteView
 
 from viewer.forms import CreatorModelForm
 from viewer.models import *
@@ -57,6 +57,7 @@ def creator(request, pk):
     return redirect("creators")
 
 
+"""
 class CreatorFormView(FormView):
     template_name = 'form.html'
     form_class = CreatorModelForm
@@ -77,8 +78,36 @@ class CreatorFormView(FormView):
         return result
 
     def form_invalid(self, form):
-        print("Form 'CreatorForm' not valid")
+        print("Form 'CreatorModelForm' not valid")
         return super().form_invalid(form)
+"""
+
+
+class CreatorCreateView(CreateView):
+    template_name = 'form.html'
+    form_class = CreatorModelForm
+    success_url = reverse_lazy('creators')
+
+    def form_invalid(self, form):
+        print("Form 'CreatorModelForm' not valid")
+        return super().form_invalid(form)
+
+
+class CreatorUpdateView(UpdateView):
+    template_name = 'form.html'
+    form_class = CreatorModelForm
+    success_url = reverse_lazy('creators')
+    model = Creator
+
+    def form_invalid(self, form):
+        print("Form 'CreatorModelForm' not valid")
+        return super().form_invalid(form)
+
+
+class CreatorDeleteView(DeleteView):
+    template_name = 'confirm_delete.html'
+    model = Creator
+    success_url = reverse_lazy('creators')
 
 
 def countries(request):

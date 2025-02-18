@@ -38,6 +38,11 @@
         <hr>
         <h6>Biografie:</h6>
         <p>{{ creator.biography }}</p>
+        <hr>
     {% endif %}
+
+    <br>
+    <a href="{% url 'creator_update' creator.id %}" class="btn btn-primary">Upravit</a>
+    <a href="{% url 'creator_delete' creator.id %}" class="btn btn-danger">Smazat</a>
 
 {% endblock %}
