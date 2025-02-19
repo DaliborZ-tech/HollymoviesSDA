@@ -5,7 +5,7 @@ from django.core.exceptions import ValidationError
 from django.forms import Form, CharField, DateField, ModelChoiceField, \
     Textarea, ModelForm, NumberInput
 
-from viewer.models import Country, Creator
+from viewer.models import Country, Creator, Genre
 
 """
 class CreatorForm(Form):
@@ -105,3 +105,31 @@ class CreatorModelForm(ModelForm):
                                  "být dříve než datum narození.")
 
         return cleaned_data
+
+
+class GenreModelForm(ModelForm):
+    class Meta:
+        model = Genre
+        fields = '__all__'
+
+        labels = {
+            'name': 'Název'
+        }
+
+    def clean_name(self):
+        initial = self.cleaned_data['name']
+        return initial.capitalize()
+
+
+class CountryModelForm(ModelForm):
+    class Meta:
+        model = Country
+        fields = '__all__'
+
+        labels = {
+            'name': 'Název'
+        }
+
+    def clean_name(self):
+        initial = self.cleaned_data['name']
+        return initial.capitalize()

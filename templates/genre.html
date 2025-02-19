@@ -11,4 +11,7 @@
             <li><a href="{% url 'movie' movie.id %}">{{ movie }}</a></li>
         {% endfor %}
     </ul>
+    <br>
+    <a href="{% url 'genre_update' genre.id %}" class="btn btn-primary">Upravit</a>
+    <a href="{% url 'genre_delete' genre.id %}" class="btn btn-danger">Smazat</a>
 {% endblock %}

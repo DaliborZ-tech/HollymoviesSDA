@@ -5,6 +5,10 @@
 {% endblock %}
 {% block content %}
     <h1>Žánry</h1>
+    <br>
+    <a href="{% url 'genre_create'%}" class="btn btn-primary">Přidat</a>
+    <br>
+    <br>
     <ul>
     {% for genre in genres %}
         {% if genre.movies.count %}

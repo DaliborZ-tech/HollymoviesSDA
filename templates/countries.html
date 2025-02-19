@@ -5,6 +5,11 @@
 {% endblock %}
 {% block content %}
     <h1>Země</h1>
+    <br>
+    <a href="{% url 'country_create'%}" class="btn btn-primary">Přidat</a>
+    <br>
+    <br>
+    <ul>
     <ul>
     {% for country in countries %}
         {% if country.movies.count %}

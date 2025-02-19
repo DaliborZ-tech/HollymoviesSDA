@@ -2,7 +2,8 @@ from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.views.generic import FormView, CreateView, UpdateView, DeleteView
 
-from viewer.forms import CreatorModelForm
+from djangoProjectHollymoviesSDA.settings import DEBUG
+from viewer.forms import CreatorModelForm, GenreModelForm, CountryModelForm
 from viewer.models import *
 
 
@@ -41,6 +42,36 @@ def genre(request, pk):
         return render(request=request, template_name='genre.html',
                       context={'genre': Genre.objects.get(id=pk)})
     return redirect("genres")
+
+
+class GenreCreateView(CreateView):
+    template_name = "form.html"
+    form_class = GenreModelForm
+    success_url = reverse_lazy("genres")
+
+    def form_invalid(self, form):
+        if DEBUG:
+            print("Genre model form invalid")
+        return super().form_invalid(form)
+
+
+class GenreUpdateView(UpdateView):
+    template_name = 'form.html'
+    form_class = GenreModelForm
+    model = Genre
+
+    def get_success_url(self):
+        return reverse_lazy('genre', kwargs={'pk': self.object.pk})
+
+    def form_invalid(self, form):
+        print("Form 'GenreModelForm' not valid")
+        return super().form_invalid(form)
+
+
+class GenreDeleteView(DeleteView):
+    template_name = 'confirm_delete.html'
+    model = Genre
+    success_url = reverse_lazy('genres')
 
 
 def creators(request):
@@ -96,8 +127,10 @@ class CreatorCreateView(CreateView):
 class CreatorUpdateView(UpdateView):
     template_name = 'form.html'
     form_class = CreatorModelForm
-    success_url = reverse_lazy('creators')
     model = Creator
+
+    def get_success_url(self):
+        return reverse_lazy('creator', kwargs={'pk': self.object.pk})
 
     def form_invalid(self, form):
         print("Form 'CreatorModelForm' not valid")
@@ -121,3 +154,32 @@ def country(request, pk):
         return render(request=request, template_name='country.html',
                       context={'country': Country.objects.get(id=pk)})
     return redirect("Countries")
+
+
+class CountryCreateView(CreateView):
+    template_name = 'form.html'
+    form_class = CountryModelForm
+    success_url = reverse_lazy('countries')
+
+    def form_invalid(self, form):
+        print("Form 'CountryModelForm' not valid")
+        return super().form_invalid(form)
+
+
+class CountryUpdateView(UpdateView):
+    template_name = 'form.html'
+    form_class = CountryModelForm
+    model = Country
+
+    def get_success_url(self):
+        return reverse_lazy('country', kwargs={'pk': self.object.pk})
+
+    def form_invalid(self, form):
+        print("Form 'CountryModelForm' not valid")
+        return super().form_invalid(form)
+
+
+class CountryDeleteView(DeleteView):
+    template_name = 'confirm_delete.html'
+    model = Country
+    success_url = reverse_lazy('countries')
