@@ -9,6 +9,7 @@
         <div class="col-md-6 text-center">
             <form method="post" class="p-4 border rounded shadow">
                 {% csrf_token %}
+                <input type="button" value="Zpět" class="btn btn-secondary" onclick="history.back()">
                 <table class="table table-borderless mx-auto">{{ form.as_table }}</table>
                 <input type="submit" id="id_submit" value="Uložit" class="btn btn-primary mt-3">
             </form>

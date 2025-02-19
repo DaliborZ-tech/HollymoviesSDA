@@ -9,6 +9,6 @@
         {% csrf_token %}
         <h6>Opravdu chcete smazat záznam "{{ object }}" z databáze?</h6>
         <input type="submit" value="Smazat" class="btn btn-danger">
-        <input type="button" value="Zpět" class="btn btn-primary" onclick="history.back()">
+        <input type="button" value="Zpět" class="btn btn-secondary" onclick="history.back()">
     </form>
 {% endblock %}

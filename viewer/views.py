@@ -3,7 +3,8 @@ from django.urls import reverse_lazy
 from django.views.generic import FormView, CreateView, UpdateView, DeleteView
 
 from djangoProjectHollymoviesSDA.settings import DEBUG
-from viewer.forms import CreatorModelForm, GenreModelForm, CountryModelForm
+from viewer.forms import CreatorModelForm, GenreModelForm, CountryModelForm, \
+    MovieModelForm
 from viewer.models import *
 
 
@@ -24,6 +25,32 @@ def movie(request, pk):
                       context=context)
     else:
         return redirect("home")
+
+
+class MovieCreateView(CreateView):
+    template_name = 'form.html'
+    form_class = MovieModelForm
+    success_url = reverse_lazy('movies')
+
+    def form_invalid(self, form):
+        if DEBUG:
+            print(form.errors)
+        return super().form_invalid(form)
+
+
+class MovieUpdateView(UpdateView):
+    template_name = 'form.html'
+    form_class = MovieModelForm
+    model = Movie
+
+    def get_success_url(self):
+        return reverse_lazy('movie', kwargs={'pk': self.object.id})
+
+
+class MovieDeleteView(DeleteView):
+    template_name = 'confirm_delete.html'
+    model = Movie
+    success_url = reverse_lazy('movies')
 
 
 def home(request):

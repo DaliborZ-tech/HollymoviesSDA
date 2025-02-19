@@ -10,8 +10,12 @@
     <h6><strong>Žánr:</strong> {% for genre in movie.genres.all %}<a href="{% url 'genre' genre.id %}">{{ genre }}</a>{% if not forloop.last %}, {% endif %}{% empty %}Tento film nemá přidělený žánr{% endfor %}</h6>
     <p><strong>Země:</strong> {% for country in movie.countries.all %}{{ country }}{% if not forloop.last %}, {% endif %}{% empty %}Původ není znám{% endfor %}</p>
     <p><strong>Délka:</strong> {% if movie.length %}{{ movie.length_format }}{% else %}Délka nebyla vyplněna{% endif %}</p>
-    <p><strong>Vyšel:</strong> {% if movie.released_year %}{{ movie.released_year }}{% elif movie.released_date %}{{ movie.released_date_cz }}{% else %}Datum vydání není znám{% endif %}</p>
+    <p><strong>Premiéra:</strong> {% if movie.released_date %}{{ movie.released_date_cz }}{% elif movie.released_year %}{{ movie.movie.released_year }}{% else %}Datum vydání není znám{% endif %}</p>
     <p><strong>Popis:</strong> {% if movie.description %}{{ movie.description }}{% else %}Popis nebyl vyplněn{% endif %}</p>
     <p><strong>Režie:</strong> {% for director in movie.directors.all %}<a href="{% url 'creator' director.id %}">{{ director }}</a>{% if not forloop.last %}, {% endif %}{% empty %}Režisér nebyl vyplněn{% endfor %}</p>
     <p><strong>Hráli:</strong> {% for actor in movie.actors.all %}<a href="{% url 'creator' actor.id %}">{{ actor }}</a>{% if not forloop.last %}, {% endif %}{% empty %}Herci nebyli vyplněni{% endfor %}</p>
+
+    <br>
+    <a href="{% url 'movie_update' movie.id %}" class="btn btn-primary">Upravit</a>
+    <a href="{% url 'movie_delete' movie.id %}" class="btn btn-danger">Smazat</a>
 {% endblock %}

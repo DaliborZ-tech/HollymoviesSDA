@@ -5,6 +5,12 @@
 {% endblock %}
 {% block content %}
     <h1>Filmy</h1>
+    <br>
+    <a href="{% url 'movie_create'%}" class="btn btn-primary">Přidat</a>
+    <br>
+    <br>
+    <ul>
+    <ul>
     <ul>
     {% for movie in movies %}
         <li><a href= {% url 'movie' movie.id %}>Film: {{ movie }}</a></li>
