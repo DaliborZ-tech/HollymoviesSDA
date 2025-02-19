@@ -49,6 +49,11 @@ class CreatorModelForm(ModelForm):
                               widget=NumberInput(attrs={'type': 'date'}),
                               label="Úmrtí")
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for visible in self.visible_fields():
+            visible.field.widget.attrs['class'] = 'form-control'
+
     def clean_name(self):
         initial = self.cleaned_data['name']
         result = initial
@@ -164,6 +169,11 @@ class MovieModelForm(ModelForm):
     released_date = DateField(required=False,
                               widget=NumberInput(attrs={'type': 'date'}),
                               label="Datum premiéry")
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for visible in self.visible_fields():
+            visible.field.widget.attrs['class'] = 'form-control'
 
     def clean_title_orig(self):
         initial = self.cleaned_data['title_orig']
