@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'django_dump_load_utf8',
 
     'viewer',
+    'accounts',
 ]
 
 MIDDLEWARE = [
@@ -62,7 +63,8 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [BASE_DIR / 'templates',
-                 BASE_DIR / 'viewer/templates',]
+                 BASE_DIR / 'viewer/templates',
+                 ]
         ,
         'APP_DIRS': True,
         'OPTIONS': {
@@ -130,3 +132,7 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+LOGIN_REDIRECT_URL = 'home'
+LOGIN_URL = 'login'
+LOGOUT_URL = 'logout'
