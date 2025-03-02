@@ -1,17 +1,181 @@
 {% extends "base.html" %}
+{% load static %}
 
 {% block title %}
     Seznam filmů
 {% endblock %}
+
 {% block content %}
-    <h1>Filmy</h1>
-    <br>
-    <a href="{% url 'movie_create'%}" class="btn btn-primary">Přidat</a>
-    <br>
-    <br>
-    <ul>
-        {% for movie in movies %}
-            <li><a href= {% url 'movie' movie.id %}>Film: {{ movie }}</a></li>
+<h1>Filmy</h1>
+<a href="{% url 'movie_create' %}" class="btn btn-primary my-3">Přidat nový film</a>
+
+<div class="row mb-3">
+  <!-- Textový input pro fulltext vyhledávání -->
+  <div class="col-md-4">
+    <input
+      type="text"
+      id="searchInput"
+      class="form-control"
+      placeholder="Hledat podle názvu..."
+    >
+  </div>
+
+  <!-- Dropdown Bootstrap (místo původního selectu) -->
+  <div class="col-md-4">
+    <div class="dropdown">
+      <button
+        id="countryDropdown"
+        class="btn btn-secondary dropdown-toggle"
+        type="button"
+        data-toggle="dropdown"
+        aria-haspopup="true"
+        aria-expanded="false"
+      >
+        Všechny země
+      </button>
+      <div class="dropdown-menu" aria-labelledby="countryDropdown">
+        <a class="dropdown-item" href="#" data-value="">
+          Všechny země
+        </a>
+        {% for country in countries %}
+        <a
+          class="dropdown-item"
+          href="#"
+          data-value="{{ country.name }}"
+        >
+          {{ country.name }}
+        </a>
         {% endfor %}
-    </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tlačítka pro řazení -->
+  <div class="col-md-4 text-end">
+    <button class="btn btn-secondary" onclick="sortTableByColumn(2)">Řadit podle roku</button>
+    <button class="btn btn-secondary" onclick="sortTableByColumn(3)">Řadit podle délky</button>
+  </div>
+</div>
+
+<div class="table-responsive">
+  <table class="table table-striped" id="moviesTable">
+    <thead>
+      <tr>
+        <th>Originální název</th>
+        <th>Český název</th>
+        <th>Rok vydání</th>
+        <th>Délka (min)</th>
+        <th>Země</th>
+        <th>Akce</th>
+      </tr>
+    </thead>
+    <tbody>
+    {% for movie in movies %}
+      <tr>
+        <td>{{ movie.title_orig }}</td>
+        <td>{{ movie.title_cz }}</td>
+        <td>{{ movie.released_year }}</td>
+        <td>
+          {% if movie.length %}
+            {{ movie.length }}
+          {% else %}
+            -
+          {% endif %}
+        </td>
+        <td>
+          {% for c in movie.countries.all %}
+            {{ c.name }}{% if not forloop.last %}, {% endif %}
+          {% endfor %}
+        </td>
+        <td>
+          <a href="{% url 'movie' movie.id %}" class="btn btn-info btn-sm me-1">Detail</a>
+          <a href="{% url 'movie_update' movie.id %}" class="btn btn-warning btn-sm me-1">Upravit</a>
+          <a href="{% url 'movie_delete' movie.id %}" class="btn btn-danger btn-sm">Smazat</a>
+        </td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+<script>
+// === Filtrování podle názvu (textové vyhledávání) ===
+document.getElementById('searchInput').addEventListener('keyup', function() {
+  let searchValue = this.value.toLowerCase();
+  let table = document.getElementById('moviesTable');
+  let rows = table.getElementsByTagName('tr');
+
+  for (let i = 1; i < rows.length; i++) {
+    let rowData = rows[i].getElementsByTagName('td')[0];
+    if (rowData) {
+      let text = rowData.textContent.toLowerCase();
+      rows[i].style.display = text.includes(searchValue) ? '' : 'none';
+    }
+  }
+});
+
+// === Filtrování podle země (používáme odkazové položky z dropdownu) ===
+document.querySelectorAll('.dropdown-item[data-value]').forEach(item => {
+  item.addEventListener('click', function(event) {
+    event.preventDefault(); // Zabrání skoku stránky kvůli href="#"
+    let selectedCountry = this.getAttribute('data-value').toLowerCase();
+    let table = document.getElementById('moviesTable');
+    let rows = table.getElementsByTagName('tr');
+
+    for (let i = 1; i < rows.length; i++) {
+      let countryCell = rows[i].getElementsByTagName('td')[4];
+      if (countryCell) {
+        let countryText = countryCell.textContent.toLowerCase();
+        rows[i].style.display =
+          !selectedCountry || countryText.includes(selectedCountry)
+          ? ''
+          : 'none';
+      }
+    }
+
+    // Přepíšeme text na tlačítku dropdownu podle zvolené země
+    document.getElementById('countryDropdown').textContent = this.textContent;
+  });
+});
+
+// === Obousměrné řazení tabulky ===
+let sortDirections = {};  // sloupec -> "asc" nebo "desc"
+
+function sortTableByColumn(colIndex) {
+  let table = document.getElementById('moviesTable');
+  let tbody = table.getElementsByTagName('tbody')[0];
+  let rows = Array.from(tbody.getElementsByTagName('tr'));
+
+  // Přepínání směru řazení
+  if (!sortDirections[colIndex]) {
+    sortDirections[colIndex] = 'asc';  // výchozí – vzestupné
+  } else {
+    sortDirections[colIndex] = (sortDirections[colIndex] === 'asc') ? 'desc' : 'asc';
+  }
+  let ascending = (sortDirections[colIndex] === 'asc');
+
+  let sortedRows = rows.sort((a, b) => {
+    let aText = a.getElementsByTagName('td')[colIndex].textContent.trim();
+    let bText = b.getElementsByTagName('td')[colIndex].textContent.trim();
+
+    // Pokus o převod na číslo kvůli letopočtům/délkám
+    let aValue = parseInt(aText);
+    let bValue = parseInt(bText);
+
+    // Pokud není číslo, řadíme abecedně
+    if (isNaN(aValue) || isNaN(bValue)) {
+      return ascending
+        ? aText.localeCompare(bText)
+        : bText.localeCompare(aText);
+    } else {
+      return ascending
+        ? aValue - bValue
+        : bValue - aValue;
+    }
+  });
+
+  // Přidáme seřazené řádky zpět do tabulky
+  sortedRows.forEach(row => tbody.appendChild(row));
+}
+</script>
 {% endblock %}

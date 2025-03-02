@@ -10,7 +10,8 @@ from viewer.models import *
 
 def movies(request):
     movies_ = Movie.objects.all()
-    context = {'movies': movies_}
+    countries_list = Country.objects.filter(movies__isnull=False).distinct()
+    context = {'movies': movies_, 'countries': countries_list}
     return render(request=request,
                   template_name='movies.html',
                   context=context)
