@@ -2,7 +2,9 @@ from datetime import datetime, date
 
 from django.db import models
 from django.db.models import Model, CharField, ManyToManyField, IntegerField, \
-    TextField, DateField, DateTimeField, ForeignKey
+    TextField, DateField, DateTimeField, ForeignKey, BooleanField
+
+from accounts.models import Profile
 
 
 class Genre(Model):
@@ -113,3 +115,23 @@ class Creator(Model):
 
     class Meta:
         ordering = ['surname']
+
+
+class Review(Model):
+    movie = ForeignKey(Movie, null=False, blank=False, related_name='reviews', on_delete=models.CASCADE)
+    reviewer = ForeignKey(Profile, null=True, blank=False, related_name='reviews', on_delete=models.SET_NULL)
+    rating = IntegerField(null=True, blank=True)
+    comment = TextField(null=True, blank=True)
+    recommendation = BooleanField(default=False)
+    created = DateTimeField(auto_now_add=True)
+    updated = DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ['-updated']
+
+    def __repr__(self):
+        return (f"Review(movie={self.movie}, reviewer={self.reviewer}, "
+                f"rating={self.rating}, comment={self.comment[:50]})")
+
+    def __str__(self):
+        return f"{self.reviewer}: {self.movie} - {self.rating}"

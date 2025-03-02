@@ -1,11 +1,12 @@
 from django.contrib.auth.mixins import PermissionRequiredMixin
+from django.db.models.aggregates import Avg
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.views.generic import FormView, CreateView, UpdateView, DeleteView
 
 from djangoProjectHollymoviesSDA.settings import DEBUG
 from viewer.forms import CreatorModelForm, GenreModelForm, CountryModelForm, \
-    MovieModelForm
+    MovieModelForm, ReviewModelForm
 from viewer.models import *
 
 
@@ -21,7 +22,28 @@ def movies(request):
 def movie(request, pk):
     if Movie.objects.filter(id=pk).exists():
         movie_ = Movie.objects.get(id=pk)
-        context = {'movie': movie_}
+
+        if request.method == 'POST':
+            rating = request.POST.get('rating')
+            comment = request.POST.get('comment')
+            recommendation = request.POST.get('recommendation')
+
+            if Review.objects.filter(movie=movie_, reviewer=Profile.objects.get(user=request.user)).exists():
+                user_rating = Review.objects.get(movie=movie_, reviewer=Profile.objects.get(user=request.user))
+                user_rating.rating = rating
+                user_rating.comment = comment
+                user_rating.recommendation = True if recommendation == 'on' else False
+                user_rating.save()
+            else:
+                Review.objects.create(
+                    rating=rating,
+                    comment=comment,
+                    recommendation=True if recommendation == 'on' else False,
+                    movie=movie_,
+                    reviewer=Profile.objects.get(user=request.user),
+                )
+
+        context = {'movie': movie_, 'review_form': ReviewModelForm}
         return render(request=request,
                       template_name='movie.html',
                       context=context)

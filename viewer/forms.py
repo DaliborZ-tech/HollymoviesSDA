@@ -1,11 +1,9 @@
 import re
 from datetime import date
-
 from django.core.exceptions import ValidationError
 from django.forms import Form, CharField, DateField, ModelChoiceField, \
-    Textarea, ModelForm, NumberInput
-
-from viewer.models import Country, Creator, Genre, Movie
+    Textarea, ModelForm, NumberInput, IntegerField, BooleanField
+from viewer.models import Country, Creator, Genre, Movie, Review
 
 """
 class CreatorForm(Form):
@@ -200,4 +198,32 @@ class MovieModelForm(ModelForm):
         released_date = cleaned_data.get('released_date')
         if released_date:
             cleaned_data['released_year'] = released_date.year
+        return cleaned_data
+
+
+class ReviewModelForm(ModelForm):
+
+    class Meta:
+        model = Review
+        fields = [
+            'rating',
+            'comment',
+            'recommendation',
+        ]
+        labels = {
+            'rating': 'Hodnocení',
+            'comment': 'Komentář',
+            'recommendation': 'Doporučení',
+        }
+
+    rating = IntegerField(min_value=1, max_value=10, label='Hodnocení')
+
+    def clean(self):
+        cleaned_data = super().clean()
+
+        rating = cleaned_data.get('rating')
+        comment = cleaned_data.get('comment')
+        recommendation = cleaned_data.get('recommendation')
+        if not rating and not comment and not recommendation:
+            raise ValidationError("Alespoň jedna položka je nutná vyplnit.")
         return cleaned_data
