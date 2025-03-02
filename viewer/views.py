@@ -1,3 +1,4 @@
+from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.views.generic import FormView, CreateView, UpdateView, DeleteView
@@ -28,10 +29,11 @@ def movie(request, pk):
         return redirect("home")
 
 
-class MovieCreateView(CreateView):
+class MovieCreateView(PermissionRequiredMixin, CreateView):
     template_name = 'form.html'
     form_class = MovieModelForm
     success_url = reverse_lazy('movies')
+    permission_required = 'viewer.add_movie'
 
     def form_invalid(self, form):
         if DEBUG:
@@ -39,19 +41,21 @@ class MovieCreateView(CreateView):
         return super().form_invalid(form)
 
 
-class MovieUpdateView(UpdateView):
+class MovieUpdateView(PermissionRequiredMixin, UpdateView):
     template_name = 'form.html'
     form_class = MovieModelForm
     model = Movie
+    permission_required = 'viewer.change_movie'
 
     def get_success_url(self):
         return reverse_lazy('movie', kwargs={'pk': self.object.id})
 
 
-class MovieDeleteView(DeleteView):
+class MovieDeleteView(PermissionRequiredMixin, DeleteView):
     template_name = 'confirm_delete.html'
     model = Movie
     success_url = reverse_lazy('movies')
+    permission_required = 'viewer.delete_movie'
 
 
 def home(request):
@@ -72,10 +76,11 @@ def genre(request, pk):
     return redirect("genres")
 
 
-class GenreCreateView(CreateView):
+class GenreCreateView(PermissionRequiredMixin, CreateView):
     template_name = "form.html"
     form_class = GenreModelForm
     success_url = reverse_lazy("genres")
+    permission_required = 'viewer.add_genre'
 
     def form_invalid(self, form):
         if DEBUG:
@@ -83,10 +88,11 @@ class GenreCreateView(CreateView):
         return super().form_invalid(form)
 
 
-class GenreUpdateView(UpdateView):
+class GenreUpdateView(PermissionRequiredMixin, UpdateView):
     template_name = 'form.html'
     form_class = GenreModelForm
     model = Genre
+    permission_required = 'viewer.change_genre'
 
     def get_success_url(self):
         return reverse_lazy('genre', kwargs={'pk': self.object.pk})
@@ -96,10 +102,11 @@ class GenreUpdateView(UpdateView):
         return super().form_invalid(form)
 
 
-class GenreDeleteView(DeleteView):
+class GenreDeleteView(PermissionRequiredMixin, DeleteView):
     template_name = 'confirm_delete.html'
     model = Genre
     success_url = reverse_lazy('genres')
+    permission_required = 'viewer.delete_genre'
 
 
 def creators(request):
@@ -142,20 +149,22 @@ class CreatorFormView(FormView):
 """
 
 
-class CreatorCreateView(CreateView):
+class CreatorCreateView(PermissionRequiredMixin, CreateView):
     template_name = 'form.html'
     form_class = CreatorModelForm
     success_url = reverse_lazy('creators')
+    permission_required = 'viewer.add_creator'
 
     def form_invalid(self, form):
         print("Form 'CreatorModelForm' not valid")
         return super().form_invalid(form)
 
 
-class CreatorUpdateView(UpdateView):
+class CreatorUpdateView(PermissionRequiredMixin, UpdateView):
     template_name = 'form.html'
     form_class = CreatorModelForm
     model = Creator
+    permission_required = 'viewer.change_creator'
 
     def get_success_url(self):
         return reverse_lazy('creator', kwargs={'pk': self.object.pk})
@@ -165,10 +174,11 @@ class CreatorUpdateView(UpdateView):
         return super().form_invalid(form)
 
 
-class CreatorDeleteView(DeleteView):
+class CreatorDeleteView(PermissionRequiredMixin, DeleteView):
     template_name = 'confirm_delete.html'
     model = Creator
     success_url = reverse_lazy('creators')
+    permission_required = 'viewer.delete_creator'
 
 
 def countries(request):
@@ -184,20 +194,22 @@ def country(request, pk):
     return redirect("Countries")
 
 
-class CountryCreateView(CreateView):
+class CountryCreateView(PermissionRequiredMixin, CreateView):
     template_name = 'form.html'
     form_class = CountryModelForm
     success_url = reverse_lazy('countries')
+    permission_required = 'viewer.add_country'
 
     def form_invalid(self, form):
         print("Form 'CountryModelForm' not valid")
         return super().form_invalid(form)
 
 
-class CountryUpdateView(UpdateView):
+class CountryUpdateView(PermissionRequiredMixin, UpdateView):
     template_name = 'form.html'
     form_class = CountryModelForm
     model = Country
+    permission_required = 'viewer.change_country'
 
     def get_success_url(self):
         return reverse_lazy('country', kwargs={'pk': self.object.pk})
@@ -207,7 +219,8 @@ class CountryUpdateView(UpdateView):
         return super().form_invalid(form)
 
 
-class CountryDeleteView(DeleteView):
+class CountryDeleteView(PermissionRequiredMixin, DeleteView):
     template_name = 'confirm_delete.html'
     model = Country
     success_url = reverse_lazy('countries')
+    permission_required = 'viewer.delete_country'
