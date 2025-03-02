@@ -1,1 +1,25 @@
-{% extends "form.html" %}
+{% extends "base.html" %}
+
+{% block title %}Přihlášení{% endblock %}
+
+{% block content %}
+    <h1>Přihlášení</h1>
+    {% if form.errors %}
+        <p>
+        Uživatelské jméno nebo heslo není správné. Zkuste to znova.
+        </p>
+    {% else %}
+        <p>Přihlaste se tímto formulářem</p>
+    {% endif %}
+    <div class="container-fluid p-4 border rounded shadow justify-content-center">
+        <form action="{% url 'login' %}" method="post">
+            {{ form.as_p }}
+            {% csrf_token %}
+            <input type="hidden" name="next" value="{{ next }}" />
+            <p><input type="submit" class="btn btn-primary" value="Přihlásit"></p>
+        </form>
+        <p>
+            <a href="{% url "password_reset" %}">Zapomněli jste heslo?</a>
+        </p>
+    </div>
+{% endblock %}
